@@ -57,7 +57,6 @@ function initializeFields() {
 ```
 
 ## step03
-
 製作小畫家
 ```java
 void setup()
@@ -92,7 +91,6 @@ void keyPressed()//按按鍵
 
 # week02
 ## step01
-
 畫卡片
 ```java
 size(500,500);
@@ -131,7 +129,6 @@ void drawCard(int x,int y)
 ```
 
 ## step02
-
 撲克牌
 ```java
 void setup()
@@ -219,7 +216,6 @@ void drawPokerCard(int x,int y,String face)
 ```
 
 ## step03
-
 洗牌
 ```java
 void setup()
@@ -259,7 +255,6 @@ void drawPokerCard(int x,int y,String face)
 
 # week03
 ## step01
-
 複製上週程式
 
 點擊滑鼠洗牌
@@ -326,7 +321,6 @@ void draw()
 ```
 
 ## step02
-
 顯示52張牌的字
 ```java
 void setup()
@@ -386,7 +380,6 @@ void draw()
 ```
 
 ## step03
-
 洗牌
 ```java
 void setup()
@@ -482,5 +475,40 @@ void drawPokerCard(int x,int y,String face)
   else fill(0);//黑字
   textSize(40);
   text(face,x,y+40);
+}
+```
+
+# week04
+## step01
+正在跑的球
+```java
+void setup()
+{
+  size(500,500);
+}
+int x=250,y=250;//變數(位置)
+void draw()
+{
+  ellipse(x,y,10,10);//橢圓
+  x=x+1;
+  y=y-1;
+}
+```
+
+會反彈的球
+```java
+void setup()
+{
+  size(500,500);
+}
+float x=250,y=250;//變數(位置)精細
+float vx=1.0,vy=-0.5;
+void draw()
+{
+  ellipse(x,y,10,10);//橢圓
+  x=x+vx;
+  y=y+vy;
+  if(x>500) vx=-vx;
+  if(y<0) vy=-vy;
 }
 ```

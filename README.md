@@ -512,3 +512,210 @@ void draw()
   if(y<0) vy=-vy;
 }
 ```
+
+用板子反彈
+```java
+void setup()
+{
+  size(500,500);
+}
+float x=250,y=250;//變數(位置)精細
+float vx=2.0,vy=-1.5;
+void draw()
+{
+  background(#FF2929);//背景，去殘影
+  int boardX=mouseX;
+  rect(boardX,470,100,20);//控制的板子
+  ellipse(x,y,10,10);//橢圓
+  x=x+vx;
+  y=y+vy;
+  if(x>500) vx=-vx;
+  if(y<0) vy=-vy;
+  if(x<0) vx=-vx;
+  if(y>470 && x>boardX && x<boardX+100) vy=-vy;
+}
+```
+
+## step02
+打球遊戲
+```java
+void setup()
+{
+  size(500,500);
+}
+float x=250,y=250;//變數(位置)精細
+float vx=2.0,vy=-1.5;
+float boardX,boardY=470,boardW=100,boardH=20;
+void draw()
+{
+  boardX=mouseX-boardW/2;
+  background(#FF2929);//背景，去殘影
+  rect(boardX,boardY,boardW,boardH);//控制的板子
+  ellipse(x,y,10,10);//橢圓
+  x=x+vx;
+  y=y+vy;
+  if(x>500) vx=-vx;
+  if(y<0) vy=-vy;
+  if(x<0) vx=-vx;
+  if((y>boardY && y<boardY+boardH) && 
+    (x>boardX && x<boardX+boardW))
+  {
+    vy=-vy;
+    vx+=(mouseX-pmouseX)/2;//mouse的移動速度
+  }
+  if(mousePressed && mouseButton==LEFT) boardW*=1.01;
+  if(mousePressed && mouseButton==RIGHT) boardW*=0.99;
+}
+```
+
+九路圍棋
+```java
+void setup()
+{
+  size(500,500);
+}
+void draw()
+{
+    //用迴圈畫棋
+    for(int x=50;x<=450;x+=50)
+    {
+       for(int y=50;y<=450;y+=50)
+       {
+         ellipse(x,y,50,50);
+       }
+    }
+}
+```
+
+陣列圍棋
+```java
+void setup()
+{
+  size(500,500);
+}
+int [][] go=
+{
+  {0,0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0,0},
+  {0,0,1,0,0,0,1,0,0},
+  {0,0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0,0},
+  {0,0,1,0,0,0,1,0,0},
+  {0,0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0,0}
+};//陣列9x9
+void draw()//用迴圈畫棋
+{  
+    for(int i=0;i<9;i++) //i對應y座標
+    {
+       for(int j=0;j<9;j++) //j對應x座標
+       {
+         if(go[i][j]==1) fill(0);
+         else fill(255);
+         ellipse(50+j*50,50+i*50,50,50);
+       }
+    }
+}
+```
+
+## step03
+加上棋盤
+```java
+void setup()
+{
+  size(500,500);
+}
+int [][] go=
+{
+  {0,0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0,0},
+  {0,0,1,0,0,0,2,0,0},
+  {0,0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0,0},
+  {0,0,1,0,0,0,2,0,0},
+  {0,0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0,0}
+};//陣列9x9
+void draw()//用迴圈畫棋
+{  
+    background(246,194,108);//木頭色棋盤
+    for(int i=1;i<=9;i++)//用迴圈畫線
+    {
+      line(50,50*i,450,50*i);
+      line(50*i,50,50*i,450);
+    }
+    
+    for(int i=0;i<9;i++) //i對應y座標
+    {
+       for(int j=0;j<9;j++) //j對應x座標
+       {
+         if(go[i][j]==1)//1是黑棋
+         {
+           fill(0);
+           ellipse(50+j*50,50+i*50,40,40);
+         }
+         else if(go[i][j]==2)//2是白棋
+         {
+           fill(255);
+           ellipse(50+j*50,50+i*50,40,40);
+         }
+       }
+    }
+}
+```
+
+簡易打棋譜
+```java
+void setup()
+{
+  size(500,500);
+}
+int [][] go=
+{
+  {0,0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0,0}
+};//陣列9x9
+int n=0;//目前棋子數
+void mousePressed()
+{
+  int j=(mouseX-25)/50;//j對應x座標
+  int i=(mouseY-25)/50;//i對應y座標
+  go[i][j]=(n%2==0)?1:2;//if(n%2==0)用1，否則2
+  n++;//多一顆棋
+}
+void draw()//用迴圈畫棋
+{  
+    background(246,194,108);//木頭色棋盤
+    for(int i=1;i<=9;i++)//用迴圈畫線
+    {
+      line(50,50*i,450,50*i);
+      line(50*i,50,50*i,450);
+    }
+    
+    for(int i=0;i<9;i++) //i對應y座標
+    {
+       for(int j=0;j<9;j++) //j對應x座標
+       {
+         if(go[i][j]==1)//1是黑棋
+         {
+           fill(0);
+           ellipse(50+j*50,50+i*50,40,40);
+         }
+         else if(go[i][j]==2)//2是白棋
+         {
+           fill(255);
+           ellipse(50+j*50,50+i*50,40,40);
+         }
+       }
+    }
+}
+```

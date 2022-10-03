@@ -719,3 +719,370 @@ void draw()//用迴圈畫棋
     }
 }
 ```
+
+# week05
+## step01
+畫棋盤線
+```java
+///畫棋盤
+size(500,700);
+for(int x=50;x<=450;x+=50)
+{
+    line(x,50,x,500);
+}
+///10條
+for(int y=50;y<=500;y+=50)
+{
+    line(50,y,450,y);
+}
+```
+
+畫棋子
+```java
+int [][]board=
+{
+  {4,5,3,2,1,2,3,5,4},
+  {0,0,0,0,0,0,0,0,0},
+  {0,6,0,0,0,0,0,6,0},
+  {7,0,7,0,7,0,7,0,7}
+};//1:將 2:士 3:象 4:車 5:馬 6:包 7:卒
+void setup()
+{
+  size(500,550);
+}
+void draw()
+{
+  for(int x=50;x<=450;x+=50)
+  {
+    line(x,50,x,250);
+    line(x,300,x,500);
+  }
+  for(int y=50;y<=500;y+=50)
+  {
+    line(50,y,450,y);
+  }
+  for(int i=0;i<4;i++)
+  {
+    for(int j=0;j<9;j++)
+    {
+      text(board[i][j],50+j*50,50+i*50);
+    }
+  }
+}
+```
+
+棋子中文
+```java
+int [][]board=
+{
+  {4,5,3,2,1,2,3,5,4},
+  {0,0,0,0,0,0,0,0,0},
+  {0,6,0,0,0,0,0,6,0},
+  {7,0,7,0,7,0,7,0,7}
+};//1:將 2:士 3:象 4:車 5:馬 6:包 7:卒
+String [] name={"將","士","象","車","馬","包","卒"};
+void setup()
+{
+  size(500,550);
+  PFont font=createFont("標楷體",30);
+  textFont(font);
+  textAlign(CENTER,CENTER);//字對齊
+}
+void draw()
+{
+  for(int x=50;x<=450;x+=50)
+  {
+    line(x,50,x,250);
+    line(x,300,x,500);
+  }
+  for(int y=50;y<=500;y+=50)
+  {
+    line(50,y,450,y);
+  }
+  for(int i=0;i<4;i++)
+  {
+    for(int j=0;j<9;j++)
+    {
+      int id=board[i][j];//從1開始
+      if(id==0) continue;
+      text(name[id-1],50+j*50,50+i*50);
+    }
+  }
+}
+```
+
+## step02
+紅黑象棋
+```java
+int [][]board=
+{
+  {4,5,3,2,1,2,3,5,4},
+  {0,0,0,0,0,0,0,0,0},
+  {0,6,0,0,0,0,0,6,0},
+  {7,0,7,0,7,0,7,0,7},
+  {0,0,0,0,0,0,0,0,0},//上面黑色
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0},//下面紅色
+  {-7, 0,-7, 0,-7, 0,-7, 0,-7},
+  {0 ,-6, 0, 0, 0, 0, 0,-6, 0},
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0},
+  {-4,-5,-3,-2,-1,-2,-3,-5,-4}
+};//1:將 2:士 3:象 4:車 5:馬 6:包 7:卒
+String [] name={"將","士","象","車","馬","包","卒"};
+String [] name2={"帥","仕","相","俥","傌","炮","兵"};
+void setup()
+{
+  size(500,550);
+  PFont font=createFont("標楷體",30);
+  textFont(font);
+  textAlign(CENTER,CENTER);//字對齊
+}
+void draw()
+{
+  background(#F0B82C);
+  for(int x=50;x<=450;x+=50)
+  {
+    line(x,50,x,250);
+    line(x,300,x,500);
+  }
+  for(int y=50;y<=500;y+=50)
+  {
+    line(50,y,450,y);
+  }
+  for(int i=0;i<10;i++)
+  {
+    for(int j=0;j<9;j++)
+    {
+      int id=board[i][j];//從1開始
+      if(id==0) continue;
+      if(id>0)
+      {
+        fill(255);
+        ellipse(50+j*50,50+i*50,40,40);
+        fill(0);
+        text(name[id-1],50+j*50,50+i*50);
+      }
+      else if(id<0)
+      {
+        fill(255);
+        ellipse(50+j*50,50+i*50,40,40);
+        fill(255,0,0);
+        text(name2[-id-1],50+j*50,50+i*50);
+      }
+    }
+  }
+}
+```
+
+滑鼠點擊生棋
+```java
+int [][]board=
+{
+  {4,5,3,2,1,2,3,5,4},
+  {0,0,0,0,0,0,0,0,0},
+  {0,6,0,0,0,0,0,6,0},
+  {7,0,7,0,7,0,7,0,7},
+  {0,0,0,0,0,0,0,0,0},//上面黑色
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0},//下面紅色
+  {-7, 0,-7, 0,-7, 0,-7, 0,-7},
+  {0 ,-6, 0, 0, 0, 0, 0,-6, 0},
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0},
+  {-4,-5,-3,-2,-1,-2,-3,-5,-4}
+};//1:將 2:士 3:象 4:車 5:馬 6:包 7:卒
+String [] name={"將","士","象","車","馬","包","卒"};
+String [] name2={"帥","仕","相","俥","傌","炮","兵"};
+void setup()
+{
+  size(500,550);
+  PFont font=createFont("標楷體",30);
+  textFont(font);
+  textAlign(CENTER,CENTER);//字對齊
+}
+void draw()
+{
+  background(#F0B82C);
+  for(int x=50;x<=450;x+=50)
+  {
+    line(x,50,x,250);
+    line(x,300,x,500);
+  }
+  for(int y=50;y<=500;y+=50)
+  {
+    line(50,y,450,y);
+  }
+  for(int i=0;i<10;i++)
+  {
+    for(int j=0;j<9;j++)
+    {
+      int id=board[i][j];//從1開始
+      if(id==0) continue;
+      if(id>0)
+      {
+        fill(255);
+        ellipse(50+j*50,50+i*50,40,40);
+        fill(0);
+        text(name[id-1],50+j*50,50+i*50);
+      }
+      else if(id<0)
+      {
+        fill(255);
+        ellipse(50+j*50,50+i*50,40,40);
+        fill(255,0,0);
+        text(name2[-id-1],50+j*50,50+i*50);
+      }
+    }
+  }
+}
+void mousePressed()
+{
+  for(int i=0;i<10;i++)
+  {
+    for(int j=0;j<9;j++)
+    {
+      if(dist(mouseX,mouseY,50+j*50,50+i*50)<20)
+      {
+        board[i][j]=1;
+      }
+    }
+  }
+}
+```
+
+象棋
+```java
+int [][]board=
+{
+  {4,5,3,2,1,2,3,5,4},
+  {0,0,0,0,0,0,0,0,0},
+  {0,6,0,0,0,0,0,6,0},
+  {7,0,7,0,7,0,7,0,7},
+  {0,0,0,0,0,0,0,0,0},//上面黑色
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0},//下面紅色
+  {-7, 0,-7, 0,-7, 0,-7, 0,-7},
+  {0 ,-6, 0, 0, 0, 0, 0,-6, 0},
+  { 0, 0, 0, 0, 0, 0, 0, 0, 0},
+  {-4,-5,-3,-2,-1,-2,-3,-5,-4}
+};//1:將 2:士 3:象 4:車 5:馬 6:包 7:卒
+String [] name={"將","士","象","車","馬","包","卒"};
+String [] name2={"帥","仕","相","俥","傌","炮","兵"};
+void setup()
+{
+  size(500,550);
+  PFont font=createFont("標楷體",30);
+  textFont(font);
+  textAlign(CENTER,CENTER);//字對齊
+}
+void draw()
+{
+  background(#F0B82C);
+  for(int x=50;x<=450;x+=50)
+  {
+    line(x,50,x,250);
+    line(x,300,x,500);
+  }
+  for(int y=50;y<=500;y+=50)
+  {
+    line(50,y,450,y);
+  }
+  for(int i=0;i<10;i++)
+  {
+    for(int j=0;j<9;j++)
+    {
+      int id=board[i][j];//從1開始
+      if(id==0) continue;
+      if(id>0)
+      {
+        fill(255);
+        ellipse(50+j*50,50+i*50,40,40);
+        fill(0);
+        text(name[id-1],50+j*50,50+i*50);
+      }
+      else if(id<0)
+      {
+        fill(255);
+        ellipse(50+j*50,50+i*50,40,40);
+        fill(255,0,0);
+        text(name2[-id-1],50+j*50,50+i*50);
+      }
+    }
+  }
+  if(handChess!=0) ellipse(mouseX,mouseY,40,40);
+}
+int handChess=0;
+void mousePressed()
+{
+  for(int i=0;i<10;i++)
+  {
+    for(int j=0;j<9;j++)
+    {
+      if(dist(mouseX,mouseY,50+j*50,50+i*50)<20)
+      {
+        handChess=board[i][j];
+        board[i][j]=0;//棋子不見
+      }//棋子放手上
+    }
+  }
+}
+void mouseReleased()
+{
+  int i=(mouseY+25-50)/50;//y是50+i*50
+  int j=(mouseX+25-50)/50;//x是50+j*50
+  board[i][j]=handChess;//手上棋子放棋盤
+  handChess=0;//手上棋子清空
+}
+```
+
+## step03
+暗棋
+```java
+int [][]board=
+{
+  { 1, 2, 2, 3, 3, 4, 4, 5},
+  { 5, 6, 6, 7, 7, 7, 7, 7},
+  {-1,-2,-2,-3,-3,-4,-4,-5},
+  {-5,-6,-6,-7,-7,-7,-7,-7}
+};//暗棋格子少，32子
+void setup()
+{
+  size(500,400);
+  PFont font=createFont("標楷體",30);
+  textFont(font);
+  textAlign(CENTER,CENTER);
+}
+void draw()
+{
+  background(#F0B82C);
+  for(int x=50;x<=450;x+=50)
+  {
+    line(x,50,x,250);
+  }
+  for(int y=50;y<=250;y+=50)
+  {
+    line(50,y,450,y);
+  }
+  for(int i=0;i<4;i++)
+  {
+    for(int j=0;j<8;j++)
+    {
+      int id=board[i][j];
+      drawChess(50+25+j*50,50+25+i*50,id);
+    }
+  }
+}
+String [] name={"將","士","象","車","馬","包","卒"};
+String [] name2={"帥","仕","相","俥","傌","炮","兵"};
+void drawChess(int x,int y,int id)
+{
+  fill(255);
+  ellipse(x,y,40,40);
+  if(id>0)
+  {
+    fill(0);
+    text(name[id-1],x,y-3);
+  }
+  else if(id<0)
+  {
+    fill(255,0,0);
+    text(name2[-id-1],x,y-3);
+  }
+}
+```

@@ -1086,3 +1086,568 @@ void drawChess(int x,int y,int id)
   }
 }
 ```
+
+# week07
+## step01
+上上週暗棋
+```java
+int [][]show=
+{
+  {0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0}
+};
+int [][]board=
+{
+  { 1, 2, 2, 3, 3, 4, 4, 5},
+  { 5, 6, 6, 7, 7, 7, 7, 7},
+  {-1,-2,-2,-3,-3,-4,-4,-5},
+  {-5,-6,-6,-7,-7,-7,-7,-7}
+};//暗棋格子少，32子
+void setup()
+{
+  size(500,400);
+  PFont font=createFont("標楷體",30);
+  textFont(font);
+  textAlign(CENTER,CENTER);
+}
+void draw()
+{
+  background(#F0B82C);
+  for(int x=50;x<=450;x+=50)
+  {
+    line(x,50,x,250);
+  }
+  for(int y=50;y<=250;y+=50)
+  {
+    line(50,y,450,y);
+  }
+  for(int i=0;i<4;i++)
+  {
+    for(int j=0;j<8;j++)
+    {
+      if(show[i][j]==0)
+      {
+        fill(255);
+        ellipse(50+25+j*50,50+25+i*50,40,40);
+      }
+      else
+      {
+        int id=board[i][j];
+        drawChess(50+25+j*50,50+25+i*50,id);
+      }
+    }
+  }
+}
+void mousePressed()
+{
+  for(int i=0;i<4;i++)
+  {
+    for(int j=0;j<8;j++)
+    {
+      if(dist(mouseX,mouseY,50+25+j*50,50+25+i*50)<20)
+      {
+        if(show[i][j]==0) show[i][j]=1;
+      }
+    }
+  }
+}
+String [] name={"將","士","象","車","馬","包","卒"};
+String [] name2={"帥","仕","相","俥","傌","炮","兵"};
+void drawChess(int x,int y,int id)
+{
+  fill(255);
+  ellipse(x,y,40,40);
+  if(id>0)
+  {
+    fill(0);
+    text(name[id-1],x,y-3);
+  }
+  else if(id<0)
+  {
+    fill(255,0,0);
+    text(name2[-id-1],x,y-3);
+  }
+}
+```
+
+暗棋洗牌
+```java
+int [][]show=
+{
+  {0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0}
+};
+int [][]board=
+{
+  { 1, 2, 2, 3, 3, 4, 4, 5},
+  { 5, 6, 6, 7, 7, 7, 7, 7},
+  {-1,-2,-2,-3,-3,-4,-4,-5},
+  {-5,-6,-6,-7,-7,-7,-7,-7}
+};//暗棋格子少，32子
+void setup()
+{
+  size(500,400);
+  PFont font=createFont("標楷體",30);
+  textFont(font);
+  textAlign(CENTER,CENTER);
+  for(int k=0;k<1000;k++)//洗1000次
+  {
+    int i1=int(random(4)),j1=int(random(8));
+    int i2=int(random(4)),j2=int(random(8));
+    int temp=board[i1][j1];
+    board[i1][j1]=board[i2][j2];
+    board[i2][j2]=temp;
+  }
+}
+void draw()
+{
+  background(#F0B82C);
+  for(int x=50;x<=450;x+=50)
+  {
+    line(x,50,x,250);
+  }
+  for(int y=50;y<=250;y+=50)
+  {
+    line(50,y,450,y);
+  }
+  for(int i=0;i<4;i++)
+  {
+    for(int j=0;j<8;j++)
+    {
+      if(show[i][j]==0)
+      {
+        fill(255);
+        ellipse(50+25+j*50,50+25+i*50,40,40);
+      }
+      else
+      {
+        int id=board[i][j];
+        drawChess(50+25+j*50,50+25+i*50,id);
+      }
+    }
+  }
+}
+void mousePressed()
+{
+  for(int i=0;i<4;i++)
+  {
+    for(int j=0;j<8;j++)
+    {
+      if(dist(mouseX,mouseY,50+25+j*50,50+25+i*50)<20)
+      {
+        if(show[i][j]==0) show[i][j]=1;
+      }
+    }
+  }
+}
+String [] name={"將","士","象","車","馬","包","卒"};
+String [] name2={"帥","仕","相","俥","傌","炮","兵"};
+void drawChess(int x,int y,int id)
+{
+  fill(255);
+  ellipse(x,y,40,40);
+  if(id>0)
+  {
+    fill(0);
+    text(name[id-1],x,y-3);
+  }
+  else if(id<0)
+  {
+    fill(255,0,0);
+    text(name2[-id-1],x,y-3);
+  }
+}
+```
+
+暗棋移動
+```java
+int [][]show=
+{
+  {0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0}
+};
+int [][]board=
+{
+  { 1, 2, 2, 3, 3, 4, 4, 5},
+  { 5, 6, 6, 7, 7, 7, 7, 7},
+  {-1,-2,-2,-3,-3,-4,-4,-5},
+  {-5,-6,-6,-7,-7,-7,-7,-7}
+};//暗棋格子少，32子
+void setup()
+{
+  size(500,400);
+  PFont font=createFont("標楷體",30);
+  textFont(font);
+  textAlign(CENTER,CENTER);
+  for(int k=0;k<1000;k++)//洗1000次
+  {
+    int i1=int(random(4)),j1=int(random(8));
+    int i2=int(random(4)),j2=int(random(8));
+    int temp=board[i1][j1];
+    board[i1][j1]=board[i2][j2];
+    board[i2][j2]=temp;
+  }
+}
+void draw()
+{
+  background(#F0B82C);
+  for(int x=50;x<=450;x+=50)
+  {
+    line(x,50,x,250);
+  }
+  for(int y=50;y<=250;y+=50)
+  {
+    line(50,y,450,y);
+  }
+  for(int i=0;i<4;i++)
+  {
+    for(int j=0;j<8;j++)
+    {
+      if(show[i][j]==0)
+      {
+        fill(255);
+        ellipse(50+25+j*50,50+25+i*50,40,40);
+      }
+      else
+      {
+        int id=board[i][j];
+        drawChess(50+25+j*50,50+25+i*50,id);
+      }
+    }
+  }
+  if(moving)
+  {
+    drawChess(50+25+moveJ*50,50+25+moveI*50,9);
+  }
+}
+int moveI=-1,moveJ=-1;
+boolean moving=false;//不是移動中
+void mousePressed()
+{
+  for(int i=0;i<4;i++)
+  {
+    for(int j=0;j<8;j++)
+    {
+      if(dist(mouseX,mouseY,50+25+j*50,50+25+i*50)<20)
+      {
+        if(show[i][j]==0) show[i][j]=1;
+        else
+        {
+          moveI=i;
+          moveJ=j;
+          moving=true;//現在移動中
+        }
+      }
+    }
+  }
+}
+String [] name={"將","士","象","車","馬","包","卒"};
+String [] name2={"帥","仕","相","俥","傌","炮","兵"};
+void drawChess(int x,int y,int id)
+{
+  fill(255);
+  ellipse(x,y,40,40);
+  if(id==9)//待移動棋子
+  {
+    fill(0,255,0);
+    ellipse(x,y,40,40);
+  }
+  else if(id>0)
+  {
+    fill(0);
+    text(name[id-1],x,y-3);
+  }
+  else if(id<0)
+  {
+    fill(255,0,0);
+    text(name2[-id-1],x,y-3);
+  }
+}
+```
+
+## step02
+拿棋子
+```java
+int [][]show=
+{
+  {0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0}
+};
+int [][]board=
+{
+  { 1, 2, 2, 3, 3, 4, 4, 5},
+  { 5, 6, 6, 7, 7, 7, 7, 7},
+  {-1,-2,-2,-3,-3,-4,-4,-5},
+  {-5,-6,-6,-7,-7,-7,-7,-7}
+};//暗棋格子少，32子
+void setup()
+{
+  size(500,400);
+  PFont font=createFont("標楷體",30);
+  textFont(font);
+  textAlign(CENTER,CENTER);
+  for(int k=0;k<1000;k++)//洗1000次
+  {
+    int i1=int(random(4)),j1=int(random(8));
+    int i2=int(random(4)),j2=int(random(8));
+    int temp=board[i1][j1];
+    board[i1][j1]=board[i2][j2];
+    board[i2][j2]=temp;
+  }
+}
+void draw()
+{
+  background(#F0B82C);
+  for(int x=50;x<=450;x+=50)
+  {
+    line(x,50,x,250);
+  }
+  for(int y=50;y<=250;y+=50)
+  {
+    line(50,y,450,y);
+  }
+  for(int i=0;i<4;i++)
+  {
+    for(int j=0;j<8;j++)
+    {
+      if(show[i][j]==0)
+      {
+        fill(255);
+        ellipse(50+25+j*50,50+25+i*50,40,40);
+      }
+      else
+      {
+        int id=board[i][j];
+        drawChess(50+25+j*50,50+25+i*50,id);
+      }
+    }
+  }
+  if(moving)
+  {
+    fill(0,255,0,128);//半透明綠色
+    ellipse(50+25+moveJ*50,50+25+moveI*50,40,40);
+    drawChess(mouseX,mouseY,moveID);
+  }
+}
+int moveI=-1,moveJ=-1,moveID=-1;
+boolean moving=false;//不是移動中
+void mousePressed()
+{
+  for(int i=0;i<4;i++)
+  {
+    for(int j=0;j<8;j++)
+    {
+      if(dist(mouseX,mouseY,50+25+j*50,50+25+i*50)<20)
+      {
+        if(show[i][j]==0) show[i][j]=1;
+        else
+        {
+          moveI=i;
+          moveJ=j;
+          moveID=board[i][j];
+          moving=true;//現在移動中
+        }
+      }
+    }
+  }
+}
+String [] name={"將","士","象","車","馬","包","卒"};
+String [] name2={"帥","仕","相","俥","傌","炮","兵"};
+void drawChess(int x,int y,int id)
+{
+  fill(255);
+  ellipse(x,y,40,40);
+  if(id>0)
+  {
+    fill(0);
+    text(name[id-1],x,y-3);
+  }
+  else if(id<0)
+  {
+    fill(255,0,0);
+    text(name2[-id-1],x,y-3);
+  }
+}
+```
+
+吃棋
+```java
+int [][]show=
+{
+  {0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0},
+  {0,0,0,0,0,0,0,0}
+};
+int [][]board=
+{
+  { 1, 2, 2, 3, 3, 4, 4, 5},
+  { 5, 6, 6, 7, 7, 7, 7, 7},
+  {-1,-2,-2,-3,-3,-4,-4,-5},
+  {-5,-6,-6,-7,-7,-7,-7,-7}
+};//暗棋格子少，32子
+void setup()
+{
+  size(500,400);
+  PFont font=createFont("標楷體",30);
+  textFont(font);
+  textAlign(CENTER,CENTER);
+  for(int k=0;k<1000;k++)//洗1000次
+  {
+    int i1=int(random(4)),j1=int(random(8));
+    int i2=int(random(4)),j2=int(random(8));
+    int temp=board[i1][j1];
+    board[i1][j1]=board[i2][j2];
+    board[i2][j2]=temp;
+  }
+}
+void draw()
+{
+  background(#F0B82C);
+  for(int x=50;x<=450;x+=50)
+  {
+    line(x,50,x,250);
+  }
+  for(int y=50;y<=250;y+=50)
+  {
+    line(50,y,450,y);
+  }
+  for(int i=0;i<4;i++)
+  {
+    for(int j=0;j<8;j++)
+    {
+      if(show[i][j]==0)
+      {
+        fill(255);
+        ellipse(50+25+j*50,50+25+i*50,40,40);
+      }
+      else
+      {
+        int id=board[i][j];
+        drawChess(50+25+j*50,50+25+i*50,id);
+      }
+    }
+  }
+  if(moving)
+  {
+    fill(0,255,0,128);//半透明綠色
+    ellipse(50+25+moveJ*50,50+25+moveI*50,40,40);
+    drawChess(mouseX,mouseY,moveID);
+  }
+}
+int moveI=-1,moveJ=-1,moveID=-1;
+boolean moving=false;//不是移動中
+void mousePressed()
+{
+  for(int i=0;i<4;i++)
+  {
+    for(int j=0;j<8;j++)
+    {
+      if(dist(mouseX,mouseY,50+25+j*50,50+25+i*50)<20)
+      {
+        if(show[i][j]==0) show[i][j]=1;
+        else
+        {
+          moveI=i;
+          moveJ=j;
+          moveID=board[i][j];
+          moving=true;//現在移動中
+        }
+      }
+    }
+  }
+}
+void mouseReleased()//放開時吃掉
+{
+  for(int i=0;i<4;i++)
+  {
+    for(int j=0;j<8;j++)
+    {
+      if(dist(mouseX,mouseY,50+25+j*50,50+25+i*50)<20)
+      {
+        if(moving)
+        {
+          board[moveI][moveJ]=0;
+          board[i][j]=moveID;
+          moving=false;
+        }
+      }
+    }
+  }
+}
+String [] name={"將","士","象","車","馬","包","卒"};
+String [] name2={"帥","仕","相","俥","傌","炮","兵"};
+void drawChess(int x,int y,int id)
+{
+  if(id==0) return;//沒棋子別進來
+  fill(255);
+  ellipse(x,y,40,40);
+  if(id>0)
+  {
+    fill(0);
+    text(name[id-1],x,y-3);
+  }
+  else if(id<0)
+  {
+    fill(255,0,0);
+    text(name2[-id-1],x,y-3);
+  }
+}
+```
+
+## step03
+音樂外掛
+```java
+//存檔，mp3拉進來，Ctrl+k看檔案
+import processing.sound.*;//音樂功能
+//使用外掛，先將外掛安裝
+void setup()
+{
+  SoundFile file=new SoundFile(this,"Intro Song_Final.mp3");
+  file.play();
+}
+void draw()
+{
+  
+}
+void mousePressed()
+{
+  SoundFile file2=new SoundFile(this,"In Game Music.mp3");
+  file2.play();
+}
+```
+
+修改程式
+```java
+//存檔，mp3拉進來，Ctrl+k看檔案
+import processing.sound.*;//音樂功能
+//使用外掛，先將外掛安裝
+SoundFile file1,file2,file3;
+void setup()
+{
+  file1=new SoundFile(this,"Intro Song_Final.mp3");
+  file2=new SoundFile(this,"In Game Music.mp3");
+  file3=new SoundFile(this,"Monkey 1");
+  file1.play();
+}
+void draw()
+{
+  
+}
+void mousePressed()
+{
+  file2.play();
+}
+void keyPressed()
+{
+  file3.play();
+}
+```

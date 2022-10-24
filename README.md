@@ -1651,3 +1651,185 @@ void keyPressed()
   file3.play();
 }
 ```
+
+# week08
+## step01
+播放音樂
+```java
+import processing.sound.*;
+SoundFile sound1,sound2,sound3;
+void setup()
+{
+  size(400,300);
+  sound1=new SoundFile(this,"Intro Song_Final.mp3");
+  sound1.play();
+}
+void draw()
+{
+  
+}
+```
+
+設舞台
+```java
+import processing.sound.*;
+SoundFile sound1,sound2,sound3;
+void setup()
+{
+  size(400,300);
+  textSize(50);
+  fill(255,0,0);
+  sound1=new SoundFile(this,"Intro Song_Final.mp3");
+  sound2=new SoundFile(this,"In Game Music.mp3");
+  sound1.play();
+}
+int stage=1;
+void draw()
+{
+  background(255);
+  if(stage==1) text("stage 1",100,100);
+  else if(stage==2) text("stage 2",100,100);
+}
+void mousePressed()
+{
+  if(stage==1)
+  {
+    stage=2;
+    sound1.stop();
+    sound2.play();
+  }
+  else if(stage==2)
+  {
+    stage=1;
+    sound2.stop();
+    sound1.play();
+  }
+}
+```
+
+簡單舞台
+```java
+void setup()
+{
+  size(400,300);
+}
+int stage=1;
+void draw()
+{
+  background(255,0,0);
+  textSize(80);
+  if(stage==1) text("stage 1",100,100);
+  else if(stage==2) text("stage 2",100,100);
+}
+void mousePressed()
+{
+  if(stage==1) stage=2;
+  else if(stage==2) stage=1;
+}
+```
+## step02
+會飛的水果
+```java
+void setup()
+{
+  size(400,300);
+}
+float fruitX=200,fruitY=150;
+float fruitVX=1,fruitVY=-1;
+boolean flying=true;//布林變數
+void draw()
+{
+  background(255,255,0);
+  ellipse(fruitX,fruitY,50,50);
+  if(flying)
+  {
+    fruitX+=fruitVX;
+    fruitY+=fruitVY;
+  }
+}
+void keyPressed()
+{
+  flying=false;
+}
+```
+
+再生水果
+```java
+void setup()
+{
+  size(400,300);
+}
+float fruitX=200,fruitY=300;
+float fruitVX=2,fruitVY=-13;
+boolean flying=true;//布林變數
+void draw()
+{
+  background(255,255,0);
+  ellipse(fruitX,fruitY,50,50);
+  if(flying)
+  {
+    fruitX+=fruitVX;
+    fruitY+=fruitVY;
+    fruitVY+=0.98/3;//重力加速度
+  }
+}
+void keyPressed()
+{
+  flying=false;
+  fruitReset();//再生一顆水果
+}
+void fruitReset()
+{
+  fruitX=random(100,300);
+  fruitY=300;//固定高度
+  fruitVX=random(-2,+2);
+  fruitVY=-13;
+  flying=true;
+}
+```
+
+## step03
+用class再生水果
+```java
+class Fruit
+{
+  float x,y,vx,vy;
+  boolean flying;
+  PApplet sketch;//讓random可以使用
+  Fruit(PApplet _sketch)
+  {
+    sketch=_sketch;
+    reset();
+  }
+  void reset()
+  {
+    x=sketch.random(100, 300);
+    y=300;
+    vx=sketch.random(-2,+2);
+    vy=-13;
+    flying=true;
+  }
+  void update()
+  {
+    x+=vx;
+    y+=vy;
+    vy+=0.98/3;
+  }
+}
+Fruit fruit;
+void setup()
+{
+  size(400,300);
+  fruit=new Fruit(this);
+}
+void draw()
+{
+  background(255,255,0);
+  ellipse(fruit.x,fruit.y,50,50);
+  fruit.update();
+}
+void keyPressed()
+{
+  fruit.reset();
+}
+```
